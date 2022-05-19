@@ -14,15 +14,30 @@ const {
   updateEvent,
   deleteEvent,
 } = require("../controllers/eventController");
+const { isValidDate } = require("../helpers/validations/events");
 
 const router = Router();
 
-// Get all events
-router.get("/get/events", jwtValidation, getAllEvents);
+router.use(jwtValidation);
 
-router.get("/get/event/:id", jwtValidation, getEventById);
+// Public routes
+router.get("/get/events", getAllEvents);
 
-router.post("/post/event", jwtValidation, registerEvent);
+router.get("/get/event/:id", getEventById);
+
+// Routes bellow will be executed with no token validation
+
+// Private routes
+router.post(
+  "/post/event",
+  [
+    check("title", "Title is required").not().isEmpty(),
+    check("start", "Starting date must be a date value").custom(isValidDate),
+    check("end", "Ending date must be a date value").custom(isValidDate),
+    validateFields,
+  ],
+  registerEvent
+);
 
 router.put("/put/event/:id", jwtValidation, updateEvent);
 

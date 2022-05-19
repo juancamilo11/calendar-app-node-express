@@ -105,17 +105,17 @@ const userLogin = async (req = request, res = response) => {
 };
 
 const validateToken = async (req = request, res = response) => {
-  const uid = req.uid;
-  const name = req.name;
+  const { uid, name } = req;
 
-  // Generate a new token
-  const token = generateJWT(uid, name);
+  // Generate JWT
+  const token = await generateJWT(uid, name);
 
-  res.json({
-    ok: true,
-    response: "Renew Token",
-    token,
-  });
+  res
+    .json({
+      ok: true,
+      token,
+    })
+    .status(200);
 };
 
 module.exports = {
