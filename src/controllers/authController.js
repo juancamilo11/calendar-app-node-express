@@ -104,7 +104,7 @@ const userLogin = async (req = request, res = response) => {
   }
 };
 
-const validateToken = async (req = request, res = response) => {
+const renewToken = async (req = request, res = response) => {
   const { uid, name } = req;
 
   // Generate JWT
@@ -113,6 +113,8 @@ const validateToken = async (req = request, res = response) => {
   res
     .json({
       ok: true,
+      uid,
+      name,
       token,
     })
     .status(200);
@@ -121,5 +123,5 @@ const validateToken = async (req = request, res = response) => {
 module.exports = {
   createUser,
   userLogin,
-  validateToken,
+  validateToken: renewToken,
 };
